@@ -1,0 +1,35 @@
+# Build outputs
+/target/
+/build/
+/dist/
+/out/
+
+# Rust
+**/target/
+Cargo.lock
+
+# C/C++
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.dylib
+*.exe
+
+# Python tooling
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local environment and generated logs
+.env
+.env.*.local
+*.log
