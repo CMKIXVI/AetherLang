@@ -2,58 +2,99 @@
 
 **Software-Defined Runtime for Heterogeneous Computing**
 
-AetherLang is a research and engineering project for software-defined orchestration across heterogeneous compute resources, including CPUs, GPUs, AI accelerators, memory and networking engines, edge devices, and future chiplet systems.
+AetherLang is a software-defined language, compiler, runtime and orchestration layer for heterogeneous physical compute.
 
-The AetherLang poster and the three available planning-reference PDFs are included in the downloadable project bundle attached to this work. The binary poster is not embedded in this GitHub repository because the connected GitHub file action only accepts UTF-8 text files; a text placeholder has been removed rather than misrepresented as an image.
+Its core goal is to let a workload move from a high-level requirement to a verified execution plan and then to concrete CPUs, GPUs, NPUs, accelerators and devices through explicit target knowledge.
 
-## Project status
+## Core architecture
 
-This repository was empty at initialization. The current commits establish the project documentation and validation plan; they do **not** claim that a production runtime, compiler, scheduler, migration engine, or hardware backend has been implemented or validated.
+`Workload Intent -> Language -> Typed IR -> Hardware Knowledge -> Capability Analysis -> Target Selection -> Lowering -> Backend -> Runtime -> Device -> Observation -> Verification`
 
-The historical AetherLang export/archive containing recovered source was not present among the files available in the current conversation or found by the Library search performed for this task. Add the original export before describing recovered source as included. Keep any future source imported from it unmodified until provenance, contents, and buildability have been checked.
+### 1. Language
 
-## Intended architecture
+AetherLang describes workloads, data, dependencies, resource requirements and execution constraints without hard-coding the program to one device.
 
-- **Language and frontend:** syntax, parsing, semantic checks, and a stable program representation.
-- **Compiler and intermediate representation:** explicit resource and execution intent, validation, and target-specific lowering.
-- **Runtime graph and event fabric:** event-driven task execution and dependency tracking.
-- **Topology-aware scheduler:** resource discovery and scheduling based on capabilities, locality, utilization, and constraints.
-- **Adaptive runtime:** policy-driven rescheduling, with explicit limits and reproducibility controls.
-- **Workload mobility:** safe migration where supported by the target runtime and resource type.
-- **Thermal and resource management:** telemetry-informed constraints and policies, subject to device access and vendor support.
-- **Observability and benchmark framework:** traceable measurements, repeatable workloads, baselines, and result provenance.
-- **Hardware target adapters:** verified mappings to concrete SDKs, drivers, board support packages, and device runtimes.
+### 2. Compiler and IR
 
-These are intended architectural areas, not a declaration that each component currently works.
+The compiler converts source into a stable, inspectable intermediate representation. The IR retains the information needed for resource selection, memory placement, synchronization and target lowering.
 
-## Repository layout
+### 3. Hardware Knowledge Layer
 
-- `docs/` — architecture, design decisions, roadmap, and validation plans.
-- `language/` — language specification and frontend design.
-- `compiler/` — compiler pipeline and IR design.
-- `runtime/` — runtime, graph execution, and event fabric.
-- `scheduler/` — resource discovery and scheduling design.
-- `backends/` — target adapter contracts and backend implementations.
-- `observability/` — tracing, metrics, and telemetry design.
-- `benchmarks/` — benchmark definitions and reproducible result format.
-- `tests/` — automated checks and fixtures.
-- `assets/` — project artwork (binary artwork is present in the downloadable bundle).
+Every supported machine is described by a versioned target profile containing compute resources, memory, topology, supported operations, SDKs, runtimes, drivers, board interfaces, firmware compatibility and constraints.
 
-## Development principles
+Hardware facts carry provenance and confidence. Unsupported capabilities produce explicit diagnostics rather than guessed code.
 
-1. Preserve source provenance; label recovered, reconstructed, and newly authored material separately.
-2. Do not call a component production-ready until a reproducible build and tests support that claim.
-3. Treat hardware support as target-specific: require documented device/SDK prerequisites and report unavailable capabilities.
-4. Measure performance using published workloads and baselines; do not publish unsupported performance claims.
-5. Make scheduling, migration, and adaptive changes observable and reproducible where practical.
+See `docs/hardware-knowledge.md` and `docs/target-registry.md`.
 
-## Status and next steps
+### 4. Hardware-aware lowering
 
-1. Import the original AetherLang export/archive and inventory every file.
-2. Reconcile imported files with this layout without silently discarding historical material.
-3. Run syntax checks, builds, and tests appropriate to each recovered component.
-4. Publish a validation report separating passing checks, blocked checks, missing dependencies, and unimplemented areas.
+The compiler selects the best valid lowering path:
+
+- native target operation
+- verified runtime primitive
+- composed supported operations
+- explicit unsupported-target diagnostic
+
+See `docs/code-generation.md`.
+
+### 5. Runtime and orchestration
+
+The runtime manages task graphs, events, resources, synchronization, placement and execution across heterogeneous devices. Adaptive decisions use target knowledge plus live telemetry.
+
+See `docs/device-orchestration.md`.
+
+### 6. Verification and receipts
+
+Each execution can produce a reproducible receipt containing the workload hash, target profile, backend/toolchain versions, selected resources, telemetry and result hashes.
+
+See `docs/verification-and-receipts.md`.
+
+## Target integration model
+
+A concrete device integration should provide:
+
+- target profile
+- capability discovery
+- SDK/toolchain mapping
+- driver/runtime mapping
+- memory and synchronization mapping
+- code generation/lowering
+- build and link integration
+- execution submission
+- telemetry
+- error translation
+- compatibility validation
+
+This keeps vendor-specific complexity inside backends while the language and runtime remain stable.
+
+## Repository status
+
+The repository currently contains the architecture and validation framework. The historical AetherLang source export has not yet been imported into this repository, so no production compiler/runtime implementation is claimed here.
+
+When the export is available, it should be imported with provenance preserved and then validated through syntax checks, builds, unit tests, integration tests and target-specific execution tests.
+
+## Engineering principles
+
+1. Hardware facts must be explicit and versioned.
+2. Generated code must be target-compatible before execution.
+3. Unsupported operations must fail clearly rather than silently degrade.
+4. Hardware-specific logic belongs in target adapters.
+5. Adaptive scheduling must be observable and reproducible.
+6. Performance claims require reproducible benchmarks.
+7. Historical/recovered source must remain distinguishable from newly authored code.
+
+## Documentation
+
+- `docs/architecture.md` — system architecture
+- `docs/hardware-knowledge.md` — target knowledge model
+- `docs/target-registry.md` — target registry and topology
+- `docs/code-generation.md` — hardware-aware lowering
+- `docs/device-orchestration.md` — heterogeneous execution
+- `docs/verification-and-receipts.md` — execution evidence
+- `docs/roadmap.md` — implementation sequence
+- `docs/source-recovery.md` — provenance and recovery rules
+- `docs/validation-plan.md` — validation methodology
 
 ## License
 
-No license has been selected yet. Until one is added, all rights are reserved by default; check ownership and third-party license obligations before publishing recovered source.
+No license has been selected yet. Until one is added, all rights are reserved by default.
