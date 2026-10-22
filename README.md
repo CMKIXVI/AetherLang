@@ -2,13 +2,13 @@
 
 **Software-Defined Runtime for Heterogeneous Computing**
 
-AetherLang is a project for research and engineering into software-defined orchestration across heterogeneous compute resources, including CPUs, GPUs, AI accelerators, memory and networking engines, edge devices, and future chiplet systems.
+AetherLang is a research and engineering project for software-defined orchestration across heterogeneous compute resources, including CPUs, GPUs, AI accelerators, memory and networking engines, edge devices, and future chiplet systems.
 
-![AetherLang overview](assets/AetherLang.jpg)
+The AetherLang poster and the three available planning-reference PDFs are included in the downloadable project bundle attached to this work. The binary poster is not embedded in this GitHub repository because the connected GitHub file action only accepts UTF-8 text files; a text placeholder has been removed rather than misrepresented as an image.
 
 ## Project status
 
-This repository was empty at initialization. The current commit establishes the project documentation and directory layout; it does **not** claim that a production runtime, compiler, scheduler, migration engine, or hardware backend has been implemented or validated.
+This repository was empty at initialization. The current commits establish the project documentation and validation plan; they do **not** claim that a production runtime, compiler, scheduler, migration engine, or hardware backend has been implemented or validated.
 
 The historical AetherLang export/archive containing recovered source was not present among the files available in the current conversation or found by the Library search performed for this task. Add the original export before describing recovered source as included. Keep any future source imported from it unmodified until provenance, contents, and buildability have been checked.
 
@@ -37,7 +37,7 @@ These are intended architectural areas, not a declaration that each component cu
 - `observability/` — tracing, metrics, and telemetry design.
 - `benchmarks/` — benchmark definitions and reproducible result format.
 - `tests/` — automated checks and fixtures.
-- `assets/` — project artwork.
+- `assets/` — project artwork (binary artwork is present in the downloadable bundle).
 
 ## Development principles
 
