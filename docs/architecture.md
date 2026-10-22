@@ -4,40 +4,42 @@ AetherLang is a software-defined language, compiler, runtime and orchestration s
 
 ## End-to-end path
 
-`Intent -> Language -> Typed IR -> Hardware Knowledge -> Capability Analysis -> Planning -> Target Lowering -> Build -> Runtime -> Device -> Observation -> Verification`
+`Intent -> Language -> Typed IR -> Hardware Knowledge -> Capability Analysis -> Target Selection -> Planning -> Target Lowering -> Build -> Runtime -> Device -> Observation -> Verification`
 
-### Language layer
+## 1. Language and workload model
 
-Defines workload semantics, types, dependencies, resource requirements and execution constraints.
+AetherLang describes workload semantics, types, dependencies, resource requirements, memory requirements and execution constraints without binding the source program to one device.
 
-### Compiler layer
+## 2. Compiler and typed IR
 
-Transforms source into a target-independent IR, validates semantics, analyzes required capabilities, selects valid targets and lowers the IR through a target adapter.
+The compiler transforms source into a target-independent IR. The IR is inspectable and retains the information required for capability analysis, memory placement, synchronization, scheduling and target lowering.
 
-### Hardware knowledge layer
+## 3. Hardware knowledge
 
-Maintains versioned knowledge of target silicon, memory, topology, peripherals, drivers, SDKs, runtime interfaces, firmware compatibility and constraints. Facts carry provenance and evidence level.
+A versioned target profile describes silicon, compute resources, memory, topology, peripherals, supported operations, drivers, SDKs, runtime interfaces, firmware compatibility and constraints. Facts carry provenance and evidence level.
 
-### Target adapter layer
+## 4. Capability analysis and target selection
 
-Encapsulates device-specific compilation, linking, runtime calls, memory mapping, synchronization, telemetry and error translation.
+The compiler resolves workload requirements against target profiles before code generation. Targets missing required capabilities or compatible toolchains are rejected. The selected target and selection rationale become part of the execution plan.
 
-### Runtime layer
+## 5. Target adapters
 
-Executes a plan across heterogeneous resources, manages events and dependencies, and exposes structured execution state.
+Device-specific compilation, linking, runtime calls, memory mapping, synchronization, telemetry and error translation remain isolated inside target adapters.
 
-### Adaptive orchestration
+## 6. Runtime and orchestration
 
-The scheduler combines static target knowledge with runtime observations to select placement and rescheduling decisions. Policies are explicit and observable.
+The runtime executes plans across heterogeneous resources, manages events and dependencies, and exposes structured execution state. Adaptive policies can combine static hardware knowledge with live telemetry.
 
-### Verification layer
+## 7. Verification and execution receipts
 
-Execution receipts connect a workload to its IR, target profile, backend, toolchain, selected resources, telemetry and output hashes.
+Execution receipts connect a workload to its IR, target profile, backend, toolchain, selected resources, telemetry and output hashes. This creates a reproducible evidence chain from source to physical execution.
 
 ## Design boundary
 
-AetherLang does not assume that all hardware is equivalent. The abstraction is the execution contract; concrete hardware behavior remains inside verified target profiles and adapters.
+AetherLang does not assume all hardware is equivalent. The abstraction is the execution contract; concrete hardware behavior remains inside verified target profiles and adapters.
 
 ## First implementation milestone
 
-Build one complete vertical slice on one testable hardware target before broadening the supported hardware matrix. The slice must demonstrate source-to-device compilation, execution and a reproducible receipt.
+Build one complete vertical slice on one testable hardware target before broadening the hardware matrix:
+
+`source -> IR -> target profile -> capability analysis -> lowering -> build -> device execution -> receipt`
