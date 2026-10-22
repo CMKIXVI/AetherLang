@@ -1,7 +1,5 @@
 # Implementation Priority
 
-The first useful vertical slice should be small but complete.
-
 ## P0 — Hardware knowledge core
 
 1. Target profile schema
@@ -29,22 +27,10 @@ The first useful vertical slice should be small but complete.
 
 ## P3 — First physical target
 
-Select one concrete, testable hardware platform. Implement its adapter end-to-end before expanding the target matrix.
-
-The first target should prove the complete path:
+Select one concrete, testable hardware platform and implement its adapter end-to-end. Prove:
 
 `source -> IR -> target knowledge -> lowering -> build -> device submission -> observation -> verified receipt`
 
 ## P4 — Scale breadth
 
-Only after the first target is stable:
-
-- additional CPU/GPU targets
-- accelerators
-- embedded boards
-- heterogeneous multi-device execution
-- migration
-- adaptive scheduling
-- thermal/resource policies
-
-This order prevents a large catalogue of unverified hardware claims from replacing a working vertical slice.
+Only after the first target is stable: additional CPU/GPU targets, accelerators, embedded boards, heterogeneous multi-device execution, migration, adaptive scheduling and thermal/resource policies.
