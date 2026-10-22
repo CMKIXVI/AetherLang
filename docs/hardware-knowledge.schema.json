@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AetherLang Target Profile",
+  "type": "object",
+  "required": ["profile_id", "version", "identity", "resources", "capabilities", "toolchains"],
+  "properties": {
+    "profile_id": {"type": "string"},
+    "version": {"type": "string"},
+    "identity": {
+      "type": "object",
+      "required": ["vendor", "device_family"],
+      "properties": {
+        "vendor": {"type": "string"},
+        "device_family": {"type": "string"},
+        "model": {"type": "string"},
+        "architecture": {"type": "string"},
+        "firmware": {"type": "string"},
+        "runtime": {"type": "string"}
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {"type": "object", "required": ["id", "kind"]}
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "toolchains": {
+      "type": "array",
+      "items": {"type": "object", "required": ["name", "version"]}
+    },
+    "provenance": {
+      "type": "array",
+      "items": {"type": "object", "required": ["source", "evidence_level"]}
+    }
+  }
+}
